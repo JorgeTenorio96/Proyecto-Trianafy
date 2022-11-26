@@ -12,11 +12,18 @@ public class PlaylistDtoConverter {
                 c.getDescription()
         );
     }
-    public GetPlaylistDTO playlistToGetPlaylistDTO(Playlist p){
+    public GetPlaylistDTO playlistToGetPlaylistDTO(Playlist playlist){
+        int numberOfSongs;
+        if(playlist.getSongs()==null){
+            numberOfSongs = 0;
+        }else{
+            numberOfSongs = playlist.getSongs().size();
+        }
         return GetPlaylistDTO
                 .builder()
-                .name(p.getName())
+                .id(playlist.getId())
+                .name(playlist.getName())
+                .numberOfSongs(playlist.getSongs().size())
                 .build();
-
     }
 }

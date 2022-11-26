@@ -14,12 +14,21 @@ public class SongDtoConverter {
         );
     }
     public GetSongDTO songToGetSongDTO(Song s){
+        String artistName;
+
+        if(s.getArtist() == null){
+            artistName = "null";
+        }else {
+            artistName = s.getArtist().getName();
+        }
+
         return GetSongDTO
                 .builder()
+                .id(s.getId())
                 .title(s.getTitle())
                 .album(s.getAlbum())
                 .year(s.getYear())
-                .artistName(s.getArtist().getName())
+                .artistName(artistName)
                 .build();
 
     }
