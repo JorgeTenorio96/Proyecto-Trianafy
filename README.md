@@ -18,7 +18,7 @@ Mediante peticiones de tipo PUT, el usuario puede editar el contenido ya existen
 
 Por último, el usuario puede eliminar contenido de la aplicación mediante peticiones de tipo DELETE, donde podrá eliminar desde un artista hasta una sola canción que se encuentre en una lista de repoducción.
 
-El proyecto se ha realizado en Spring.
+El proyecto se ha realizado con Spring Boot en el lenguaje Java.
 
 ## Funcionalidades
 
