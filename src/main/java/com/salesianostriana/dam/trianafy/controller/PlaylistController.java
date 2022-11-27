@@ -3,10 +3,12 @@ package com.salesianostriana.dam.trianafy.controller;
 import com.salesianostriana.dam.trianafy.dto.CreatePlaylistDTO;
 import com.salesianostriana.dam.trianafy.dto.GetPlaylistDTO;
 import com.salesianostriana.dam.trianafy.dto.PlaylistDtoConverter;
+import com.salesianostriana.dam.trianafy.dto.SongPlaylistDTO;
 import com.salesianostriana.dam.trianafy.model.Playlist;
 import com.salesianostriana.dam.trianafy.model.Song;
 import com.salesianostriana.dam.trianafy.repos.PlaylistRepository;
 import com.salesianostriana.dam.trianafy.repos.SongRepository;
+import com.salesianostriana.dam.trianafy.service.PlaylistService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +23,8 @@ public class PlaylistController {
 
     private final PlaylistRepository playrepo;
     private final PlaylistDtoConverter dtoConverter;
+
+    private final PlaylistService playService;
 
     private final SongRepository songrepo;
 
@@ -94,7 +98,34 @@ public class PlaylistController {
         return ResponseEntity.ok(playlist);
 
     }}
+    @GetMapping("/list/{id}/song/")
+    public ResponseEntity <Playlist> getSongsFromPlaylist(@PathVariable Long id){
 
+        return ResponseEntity.of(playrepo.findById(id));
+
+    }
+    @GetMapping("/list/{idList}/song/{idSong}")
+    public ResponseEntity<Playlist> getSongToPlaylist(@PathVariable("idList") Long idList, @PathVariable("idSong") Long idSong){
+        if(!playrepo.existsById(idList) && !songrepo.existsById(idSong)){
+            return ResponseEntity.notFound().build();
+        }else{
+            Playlist playlist = playrepo.findById(idList).orElse(null);
+            Song song = songrepo.findById(idSong).orElse(null);
+
+
+            return ResponseEntity.ok(playlist);
+
+        }}
+    @DeleteMapping("/list/{idList}/song/{idSong}")
+    public ResponseEntity<Playlist> deleteSongFromPlaylist(@PathVariable("idList") Long idList, @PathVariable("idSong") Long idSong){
+        if(playrepo.existsById(idList) & songrepo.existsById(idSong)){
+            playService.findById(idList).get().getSongs().removeAll(songrepo.findById(idSong).stream().toList());
+            playService.add(playService.findById(idList).get());
+            return ResponseEntity.noContent().build();
+        }else{
+            return ResponseEntity.notFound().build();
+        }
+    }
 
 
 
